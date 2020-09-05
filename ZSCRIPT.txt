@@ -119,7 +119,7 @@ class HDWeaponCrate : HDUPK
 	}
 }
 
-class WeaponCrateHandler : EventHandler
+class WeaponCrateHandler : StaticEventHandler
 {
 	override void CheckReplacement(ReplaceEvent e)
 	{
