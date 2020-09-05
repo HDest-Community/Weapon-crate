@@ -1,0 +1,144 @@
+version "4.0"
+
+class HDWeaponCrate : HDUPK
+{
+	//  [Ace] Some of these will
+	static const class<HDWeapon> Blacklist[] =
+	{
+		"HDWeapon",
+		"AutoReloadingThingy",
+		"HDHandgun",
+		"HDCellWeapon",
+		"HDShotgun",
+		"BossRifle",
+		"Brontornis",
+		"Lumberjack",
+		"HDPistol",
+		"HDRL",
+		"Blooper",
+		"HDSMG",
+		"ZM66AssaultRifle",
+		"BFG9K",
+		"Hunter",
+		"Slayer",
+		"Thunderbuster",
+		"LiberatorRifle",
+		"HDRevolver",
+		"Vulcanette"
+	};
+
+	private bool IsBlacklisted(class<HDWeapon> wpn)
+	{
+		for (int i = 0; i < Blacklist.Size(); ++i)
+		{
+			if (Blacklist[i] == wpn)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	override void Tick()
+	{
+		UseTimer--;
+
+		roll *= 0.6;
+
+		Super.Tick();
+	}
+
+	int UseTimer;
+
+	Default
+	{
+		+ROLLSPRITE
+		+ROLLCENTER
+		+SHOOTABLE
+		+NOBLOOD
+		+NOPAIN
+		Scale 0.75;
+		Height 8;
+		Radius 12;
+		Health 100;
+		Mass 120;
+	}
+
+	States
+	{
+		Spawn:
+			WPCR T -1;
+			Stop;
+		Grab:
+			WPCR T 1
+			{
+				if (Distance3D(picktarget) > 50)
+				{
+					return;
+				}
+
+				if (UseTimer <= 0)
+				{
+					UseTimer = 10;
+					vel.z = 3;
+					A_SetRoll(frandompick(-5, 5), SPF_INTERPOLATE);
+				}
+				else
+				{
+					SetStateLabel("DropGoods");
+				}
+			}
+			Goto Spawn;
+		DropGoods:
+			TNT1 A 1;
+			TNT1 A 0
+			{
+				Array<class<HDWeapon> > WeaponsToDrop;
+				for (int i = 0; i < AllActorClasses.Size(); ++i)
+				{
+					let CurrWeapon =  HDWeapon(GetDefaultByType(AllActorClasses[i]));
+					if (CurrWeapon && !CurrWeapon.bWIMPY_WEAPON && !CurrWeapon.bCHEATNOTWEAPON && !CurrWeapon.bDONTNULL && !IsBlacklisted(CurrWeapon.GetClass()))
+					{
+						WeaponsToDrop.Push(CurrWeapon.GetClass());
+					}
+				}
+
+				if (WeaponsToDrop.Size() > 0)
+				{
+					class<HDWeapon> PickedWeapon = WeaponsToDrop[random(0, WeaponsToDrop.Size() - 1)];
+					A_SpawnItemEx(PickedWeapon, 0, 0, 0, frandom(0.5, 1.0), 0, frandom(3.0, 6.0), random(0, 359), SXF_NOCHECKPOSITION);
+				}
+			}
+			Stop;
+		Death:
+			TNT1 A 1
+			{
+				Spawn("HDExplosion", pos, ALLOW_REPLACE);
+				A_Explode(64, 64);
+			}
+			Stop;
+	}
+}
+
+class WeaponCrateHandler : EventHandler
+{
+	override void CheckReplacement(ReplaceEvent e)
+	{
+		if (!e.Replacement)
+		{
+			return;
+		}
+
+		switch (e.Replacement.GetClassName())
+		{
+			case 'RLReplaces':
+				if (!random(0, 5))
+				{
+					e.Replacement = "HDWeaponCrate";
+					e.IsFinal = true;
+				}
+				break;
+		}
+	}
+}
