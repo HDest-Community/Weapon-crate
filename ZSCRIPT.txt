@@ -2,7 +2,6 @@ version "4.0"
 
 class HDWeaponCrate : HDUPK
 {
-	//  [Ace] Some of these will
 	static const class<HDWeapon> Blacklist[] =
 	{
 		"HDWeapon",
