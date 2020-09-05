@@ -90,8 +90,7 @@ class HDWeaponCrate : HDUPK
 			}
 			Goto Spawn;
 		DropGoods:
-			TNT1 A 1;
-			TNT1 A 0
+			TNT1 A 1
 			{
 				Array<class<HDWeapon> > WeaponsToDrop;
 				for (int i = 0; i < AllActorClasses.Size(); ++i)
@@ -132,7 +131,7 @@ class WeaponCrateHandler : EventHandler
 		switch (e.Replacement.GetClassName())
 		{
 			case 'RLReplaces':
-				if (!random(0, 5))
+				if (!random(0, 6))
 				{
 					e.Replacement = "HDWeaponCrate";
 					e.IsFinal = true;
