@@ -4,11 +4,6 @@ class HDWeaponCrate : HDUPK
 {
 	static const class<HDWeapon> Blacklist[] =
 	{
-		"HDWeapon",
-		"AutoReloadingThingy",
-		"HDHandgun",
-		"HDCellWeapon",
-		"HDShotgun",
 		"BossRifle",
 		"Brontornis",
 		"Lumberjack",
@@ -96,7 +91,7 @@ class HDWeaponCrate : HDUPK
 				for (int i = 0; i < AllActorClasses.Size(); ++i)
 				{
 					let CurrWeapon =  HDWeapon(GetDefaultByType(AllActorClasses[i]));
-					if (CurrWeapon && !CurrWeapon.bWIMPY_WEAPON && !CurrWeapon.bCHEATNOTWEAPON && !CurrWeapon.bDONTNULL && !IsBlacklisted(CurrWeapon.GetClass()))
+					if (CurrWeapon && !CurrWeapon.bWIMPY_WEAPON && !CurrWeapon.bCHEATNOTWEAPON && !CurrWeapon.bDONTNULL && !IsBlacklisted(CurrWeapon.GetClass()) && CurrWeapon.WeaponBulk() > 0 && !CurrWeapon.bINVBAR && CurrWeapon.Refid != "")
 					{
 						WeaponsToDrop.Push(CurrWeapon.GetClass());
 					}
