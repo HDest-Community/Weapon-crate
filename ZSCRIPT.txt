@@ -114,7 +114,7 @@ class HDWeaponCrate : HDUPK
 	}
 }
 
-class WeaponCrateHandler : StaticEventHandler
+class WeaponCrateHandler : EventHandler
 {
 	override void CheckReplacement(ReplaceEvent e)
 	{
@@ -126,10 +126,9 @@ class WeaponCrateHandler : StaticEventHandler
 		switch (e.Replacement.GetClassName())
 		{
 			case 'RLReplaces':
-				if (!random(0, 6))
+				if (!random[craterand](0, 6))
 				{
 					e.Replacement = "HDWeaponCrate";
-					e.IsFinal = true;
 				}
 				break;
 		}
