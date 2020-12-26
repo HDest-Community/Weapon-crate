@@ -1,5 +1,26 @@
 version "4.0"
 
+class WeaponCrateHandler : StaticEventHandler
+{
+	override void CheckReplacement(ReplaceEvent e)
+	{
+		if (!e.Replacement)
+		{
+			return;
+		}
+
+		switch (e.Replacement.GetClassName())
+		{
+			case 'RLReplaces':
+				if (!random[craterand](0, 6))
+				{
+					e.Replacement = "HDWeaponCrate";
+				}
+				break;
+		}
+	}
+}
+
 class HDWeaponCrate : HDUPK
 {
 	static const class<HDWeapon> Blacklist[] =
@@ -41,6 +62,11 @@ class HDWeaponCrate : HDUPK
 		roll *= 0.6;
 
 		Super.Tick();
+	}
+
+	override bool OnGrab(Actor other)
+	{
+		return false;
 	}
 
 	int UseTimer;
@@ -111,26 +137,5 @@ class HDWeaponCrate : HDUPK
 				A_Explode(64, 64);
 			}
 			Stop;
-	}
-}
-
-class WeaponCrateHandler : StaticEventHandler
-{
-	override void CheckReplacement(ReplaceEvent e)
-	{
-		if (!e.Replacement)
-		{
-			return;
-		}
-
-		switch (e.Replacement.GetClassName())
-		{
-			case 'RLReplaces':
-				if (!random[craterand](0, 6))
-				{
-					e.Replacement = "HDWeaponCrate";
-				}
-				break;
-		}
 	}
 }
