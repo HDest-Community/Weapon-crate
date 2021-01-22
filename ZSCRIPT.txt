@@ -69,6 +69,8 @@ class HDWeaponCrate : HDUPK
 		return false;
 	}
 
+	override void A_HDUPKGive() { }
+
 	int UseTimer;
 
 	Default
