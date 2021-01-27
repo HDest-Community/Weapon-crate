@@ -80,7 +80,7 @@ class HDWeaponCrate : HDUPK
 		+SHOOTABLE
 		+NOBLOOD
 		+NOPAIN
-		Scale 0.25;
+		Scale 0.375;
 		Height 8;
 		Radius 12;
 		Health 100;
