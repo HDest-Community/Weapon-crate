@@ -103,7 +103,7 @@ class HDWeaponCrate : HDUPK
 				if (UseTimer <= 0)
 				{
 					UseTimer = 10;
-					vel.z = 3;
+					vel.z = 2;
 					A_SetRoll(frandompick(-5, 5), SPF_INTERPOLATE);
 				}
 				else
